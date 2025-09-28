@@ -11,11 +11,17 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.152",
     "@types/node": "^24.5.2",
     "aws-cdk": "^2.1029.3",
     "aws-cdk-lib": "^2.217.0",
     "construct": "^1.0.0",
+    "esbuild": "^0.25.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "uuid": "^13.0.0"
   }
 }
