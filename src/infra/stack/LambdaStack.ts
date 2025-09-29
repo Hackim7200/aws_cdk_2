@@ -1,14 +1,11 @@
 import { Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import {
-  Code,
-
-  Runtime,
-} from "aws-cdk-lib/aws-lambda";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { join } from "path";
 import { LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 interface LambdaStackProps extends StackProps {
   spacesTable: ITable;
@@ -28,6 +25,14 @@ export class LambdaStack extends Stack {
         TABLE_NAME: props.spacesTable.tableName,
       },
     });
-    this.helloLambdaIntegration = new LambdaIntegration(helloLambda)
+    //To list the buckets you need to change IAM permission for lambda to access s3
+    helloLambda.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["s3:ListBucket", "s3:ListAllMyBuckets"],
+        resources: ["*"],
+      })
+    );
+    this.helloLambdaIntegration = new LambdaIntegration(helloLambda);
   }
 }
