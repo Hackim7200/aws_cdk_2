@@ -5,34 +5,29 @@ import { join } from "path";
 import { LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 interface LambdaStackProps extends StackProps {
   spacesTable: ITable;
 }
 
 export class LambdaStack extends Stack {
-  public readonly helloLambdaIntegration: LambdaIntegration;
+  public readonly reservationLambdaIntegration: LambdaIntegration;
 
   constructor(scope: Construct, id: string, props: LambdaStackProps) {
     super(scope, id, props);
 
-    const helloLambda = new NodejsFunction(this, "HelloLambda", {
+    const ReservationLambda = new NodejsFunction(this, "ReservationLambda", {
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: join(__dirname, "..", "..", "services", "hello.ts"),
+      entry: join(__dirname, "..", "..", "services", "reservation", "handler.ts"),
       environment: {
         TABLE_NAME: props.spacesTable.tableName,
       },
     });
     //To list the buckets you need to change IAM permission for lambda to access s3
-    helloLambda.addToRolePolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        actions: ["s3:ListBucket", "s3:ListAllMyBuckets"],
-        resources: ["*"],
-      })
+
+    this.reservationLambdaIntegration = new LambdaIntegration(
+      ReservationLambda
     );
-    this.helloLambdaIntegration = new LambdaIntegration(helloLambda);
   }
 }
