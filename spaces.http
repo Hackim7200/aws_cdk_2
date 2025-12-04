@@ -1,4 +1,10 @@
 # GET https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/reservation
 
 
-POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/reservation
+POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
+Content-Type: application/json
+
+{
+  "title": "The Matrix",
+  "year": "2025"
+}

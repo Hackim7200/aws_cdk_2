@@ -10,4 +10,6 @@ const lambdaStack = new LambdaStack(app, "LambdaStack", {
 });
 new ApiStack(app, "ApiStack", {
   reservationLambdaIntegration: lambdaStack.reservationLambdaIntegration,
+  moviesLambdaIntegration: lambdaStack.moviesLambdaIntegration,
 });
+
