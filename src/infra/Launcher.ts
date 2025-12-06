@@ -6,10 +6,9 @@ import { ApiStack } from "./stack/ApiStack";
 const app = new App();
 const dataStack = new DataStack(app, "DataStack");
 const lambdaStack = new LambdaStack(app, "LambdaStack", {
-  spacesTable: dataStack.spacesTable,
+  moviesTable: dataStack.spacesTable,
 });
 new ApiStack(app, "ApiStack", {
   reservationLambdaIntegration: lambdaStack.reservationLambdaIntegration,
   moviesLambdaIntegration: lambdaStack.moviesLambdaIntegration,
 });
-

@@ -8,7 +8,7 @@ import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 interface LambdaStackProps extends StackProps {
-  spacesTable: ITable;
+  moviesTable: ITable;
 }
 
 export class LambdaStack extends Stack {
@@ -30,7 +30,7 @@ export class LambdaStack extends Stack {
         "handler.ts"
       ),
       environment: {
-        TABLE_NAME: props.spacesTable.tableName,
+        TABLE_NAME: props.moviesTable.tableName,
       },
     });
     //To list the buckets you need to change IAM permission for lambda to access s3
@@ -45,14 +45,14 @@ export class LambdaStack extends Stack {
       handler: "handler",
       entry: join(__dirname, "..", "..", "services", "movies", "handler.ts"),
       environment: {
-        TABLE_NAME: props.spacesTable.tableName, // or a different table if needed
+        TABLE_NAME: props.moviesTable.tableName, // or a different table if needed
       },
     });
     //Add IAM permission to the MoviesLambda to access the DynamoDB table
     MoviesLambda.addToRolePolicy(
       new PolicyStatement({
         effect: Effect.ALLOW,
-        resources: [props.spacesTable.tableArn],
+        resources: [props.moviesTable.tableArn],
         actions: ["dynamodb:PutItem"],
       })
     );

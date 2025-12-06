@@ -4,7 +4,8 @@ import {
   APIGatewayProxyResult,
 } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { PostMovies } from "./PostMovies";
+import { postMovies } from "./PostMovies";
+import { getMovies } from "./GetMovies";
 
 const ddbClient = new DynamoDBClient({});
 
@@ -16,12 +17,14 @@ async function handler(
 
   try {
     switch (event.httpMethod) {
-      case "POST":
-        const response = await PostMovies(event, ddbClient);
-        return response;
       case "GET":
-        message = "Hello from movies GET";
-        break;
+        const getResponse = getMovies(event, ddbClient);
+        return getResponse;
+
+      case "POST":
+        const postResponse = postMovies(event, ddbClient);
+        return postResponse;
+
       default:
         message = "Hello from movies default";
         break;

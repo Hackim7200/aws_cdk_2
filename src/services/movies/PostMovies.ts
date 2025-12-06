@@ -2,7 +2,7 @@ import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 } from "uuid";
 
-export async function PostMovies(
+export async function postMovies(
   event: APIGatewayProxyEvent,
   ddbClient: DynamoDBClient
 ): Promise<APIGatewayProxyResult> {
@@ -19,6 +19,7 @@ export async function PostMovies(
       },
     })
   );
+
   return {
     statusCode: 201,
     body: JSON.stringify({ id: randomId }), //returns the id of the item that was created
