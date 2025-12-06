@@ -4,7 +4,7 @@ import {
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { get } from "http";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 export async function getMovies(
   event: APIGatewayProxyEvent,
@@ -23,9 +23,10 @@ export async function getMovies(
       );
 
       if (getItemResponse.Item) {
+        const unmarshalledItem = unmarshall(getItemResponse.Item);
         return {
           statusCode: 200,
-          body: JSON.stringify(getItemResponse.Item),
+          body: JSON.stringify(unmarshalledItem),
         };
       } else {
         return {
@@ -48,9 +49,10 @@ export async function getMovies(
       TableName: process.env.TABLE_NAME, //this is defined in the LambdaStack.ts file
     })
   );
-  console.log(result.Items);
+  const unmarshalledItems = result.Items?.map((item) => unmarshall(item));
+  console.log(unmarshalledItems);
   return {
     statusCode: 201,
-    body: JSON.stringify({ movies: result.Items }), //returns the id of the item that was created
+    body: JSON.stringify(unmarshalledItems), //returns the id of the item that was created
   };
 }

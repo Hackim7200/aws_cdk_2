@@ -14,9 +14,9 @@ import { handler } from "../src/services/movies/handler";
 handler(
   {
     httpMethod: "GET",
-    queryStringParameters: {
-      id: "ad2e3dfb-bfef-48d7-8db4-6f4cd8c006ea",
-    },
+    // queryStringParameters: {
+    //   id: "ad2e3dfb-bfef-48d7-8db4-6f4cd8c006ea",
+    // },
   } as any,
   {} as any
 );
