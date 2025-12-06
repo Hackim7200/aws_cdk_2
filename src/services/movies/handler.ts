@@ -19,6 +19,7 @@ async function handler(
     switch (event.httpMethod) {
       case "GET":
         const getResponse = getMovies(event, ddbClient);
+        console.log(getResponse);
         return getResponse;
 
       case "POST":
