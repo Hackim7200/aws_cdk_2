@@ -31,15 +31,25 @@ import { handler } from "../src/services/movies/handler";
 //   {} as any
 // );
 
+// handler(
+//   {
+//     httpMethod: "PUT",
+//     queryStringParameters: {
+//       id: "1c998ea9-c7da-459f-a711-f486cbb8bf65",
+//     },
+//     body: JSON.stringify({
+//       title: "dublin updated",
+//     }),
+//   } as any,
+//   {} as any
+// );
+
 handler(
   {
-    httpMethod: "PUT",
+    httpMethod: "DELETE",
     queryStringParameters: {
       id: "1c998ea9-c7da-459f-a711-f486cbb8bf65",
     },
-    body: JSON.stringify({
-      title: "dublin updated",
-    }),
   } as any,
   {} as any
-);
+).then((result) => console.log(result));

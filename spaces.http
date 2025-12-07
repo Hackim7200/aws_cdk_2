@@ -1,10 +1,18 @@
 # GET https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/reservation
 
 
-POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
+# POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
+# Content-Type: application/json
+
+# {
+#   "title": "Sunday movie",
+#   "year": "2025"
+# }
+
+
+DELETE  https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id
 Content-Type: application/json
 
 {
-  "title": "The today's movie",
-  "year": "2025"
+  "id": "d513a4d7-55e0-4e36-b1b0-90ae6209b11b"
 }

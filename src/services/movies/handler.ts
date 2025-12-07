@@ -7,6 +7,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { postMovies } from "./PostMovies";
 import { getMovies } from "./GetMovies";
 import { updateMovies } from "./UpdateMovies";
+import { deleteMovies } from "./DeleteMovies";
 
 const ddbClient = new DynamoDBClient({});
 
@@ -19,17 +20,21 @@ async function handler(
   try {
     switch (event.httpMethod) {
       case "GET":
-        const getResponse = getMovies(event, ddbClient);
+        const getResponse = await getMovies(event, ddbClient);
         console.log(getResponse);
         return getResponse;
 
       case "POST":
-        const postResponse = postMovies(event, ddbClient);
+        const postResponse = await postMovies(event, ddbClient);
         return postResponse;
 
       case "PUT":
-        const putResponse = updateMovies(event, ddbClient);
+        const putResponse = await updateMovies(event, ddbClient);
         return putResponse;
+
+      case "DELETE":
+        const deleteResponse = await deleteMovies(event, ddbClient);
+        return deleteResponse;
 
       default:
         message = "Hello from movies default";

@@ -13,7 +13,6 @@ export class ApiStack extends Stack {
 
     const api = new RestApi(this, "spacesApi"); //create a rest api named spacesApi
 
-    
     const spacesResource = api.root.addResource("reservation"); // adds the path /spaces to the api gateway
     spacesResource.addMethod("GET", props.reservationLambdaIntegration); // adds a GET method to the spaces path
     spacesResource.addMethod("POST", props.reservationLambdaIntegration); // adds a POST method to the spaces path
@@ -21,5 +20,7 @@ export class ApiStack extends Stack {
     const moviesResource = api.root.addResource("movies");
     moviesResource.addMethod("GET", props.moviesLambdaIntegration);
     moviesResource.addMethod("POST", props.moviesLambdaIntegration);
+    moviesResource.addMethod("PUT", props.moviesLambdaIntegration);
+    moviesResource.addMethod("DELETE", props.moviesLambdaIntegration);
   }
 }
