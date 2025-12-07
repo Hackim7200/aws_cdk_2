@@ -1,5 +1,5 @@
-# GET https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/reservation
-
+GET https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
+###
 
 # POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
 # Content-Type: application/json
@@ -16,7 +16,7 @@ Content-Type: application/json
 {
   "title": "Harry Beta"
 }
-###
+
 
 
 # DELETE  https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id
