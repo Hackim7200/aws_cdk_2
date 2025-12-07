@@ -6,6 +6,7 @@ import {
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { postMovies } from "./PostMovies";
 import { getMovies } from "./GetMovies";
+import { updateMovies } from "./UpdateMovies";
 
 const ddbClient = new DynamoDBClient({});
 
@@ -25,6 +26,10 @@ async function handler(
       case "POST":
         const postResponse = postMovies(event, ddbClient);
         return postResponse;
+
+      case "PUT":
+        const putResponse = updateMovies(event, ddbClient);
+        return putResponse;
 
       default:
         message = "Hello from movies default";
