@@ -1,4 +1,5 @@
 import { DynamoDBClient, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 export async function updateMovies(
@@ -33,8 +34,8 @@ export async function updateMovies(
       })
     );
     return {
-      statusCode: 204,
-      body: JSON.stringify(updateResult.Attributes), // attributes tells you what was updated
+      statusCode: 200,
+      body: JSON.stringify(unmarshall(updateResult.Attributes)), // attributes tells you what was updated
     };
   }
   return {

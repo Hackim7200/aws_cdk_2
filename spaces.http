@@ -5,14 +5,23 @@
 # Content-Type: application/json
 
 # {
-#   "title": "Sunday movie",
+#   "title": "Harry Potter",
 #   "year": "2025"
 # }
 
 
-DELETE  https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id
+PUT https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id=0d54b399-aa69-4234-a4eb-cfc42e2011ba
 Content-Type: application/json
 
 {
-  "id": "d513a4d7-55e0-4e36-b1b0-90ae6209b11b"
+  "title": "Harry Beta"
 }
+###
+
+
+# DELETE  https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id
+# Content-Type: application/json
+
+# {
+#   "id": "d513a4d7-55e0-4e36-b1b0-90ae6209b11b"
+# }
