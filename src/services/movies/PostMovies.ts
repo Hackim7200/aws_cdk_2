@@ -3,13 +3,15 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 } from "uuid";
 import { validateAsMovieEntry } from "../shared/Validator";
 import { marshall } from "@aws-sdk/util-dynamodb";
+import { parseJson } from "../shared/Utils";
 
 export async function postMovies(
   event: APIGatewayProxyEvent,
   ddbClient: DynamoDBClient
 ): Promise<APIGatewayProxyResult> {
   const randomId = v4();
-  const item = JSON.parse(event.body);
+  const item = parseJson(event.body);
+
   item.id = randomId; // this is required if its not provide the validator in /shared/Validator.ts will throw an error saying no id provided
   validateAsMovieEntry(item);
 

@@ -9,6 +9,17 @@ export class MissingFieldsError extends Error {
     //concatinating the message with the value that is missing
   }
 }
+export class JsonError extends Error {
+    
+
+
+}
+
+
+
+
+
+
 // retuns the value that missing in the object
 export function validateAsMovieEntry(arg: any) {
   //   if ((arg as MovieEntry).photoUrl === undefined) { // this is optional field so we are not throwing an error for it
