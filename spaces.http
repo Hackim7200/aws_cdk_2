@@ -1,27 +1,28 @@
 GET https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
 ###
 
-# POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
-# Content-Type: application/json
-
-# {
-#   "title": "Harry Potter",
-#   "year": "2025"
-# }
 
 
-PUT https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id=0d54b399-aa69-4234-a4eb-cfc42e2011ba
+POST https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies
 Content-Type: application/json
-
 {
-  "title": "Harry Beta"
+  "title": "Black Panther 2",
+  "year": "2025"
 }
+###
 
 
 
-# DELETE  https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id
-# Content-Type: application/json
 
-# {
-#   "id": "d513a4d7-55e0-4e36-b1b0-90ae6209b11b"
-# }
+PUT https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id=22e44f77-2fd5-45d5-9c3f-98419e683ba7
+Content-Type: application/json
+{
+  "year": "2000000000000001"
+}
+###
+
+
+
+
+DELETE  https://w1b3r5hhue.execute-api.eu-west-2.amazonaws.com/prod/movies?id=22e44f77-2fd5-45d5-9c3f-98419e683ba7
+###

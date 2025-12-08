@@ -8,6 +8,7 @@ import { postMovies } from "./PostMovies";
 import { getMovies } from "./GetMovies";
 import { updateMovies } from "./UpdateMovies";
 import { deleteMovies } from "./DeleteMovies";
+import { MissingFieldsError } from "../shared/Validator";
 
 const ddbClient = new DynamoDBClient({});
 
@@ -41,10 +42,17 @@ async function handler(
         break;
     }
   } catch (error) {
-    console.error(error);
+
+    // checks if error is due to missing fields
+    if (error instanceof MissingFieldsError) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify( error.message ),
+      };
+    }
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal server error" }),
+      body: JSON.stringify(error.message),
     };
   }
 
