@@ -1,13 +1,17 @@
 import { App } from "aws-cdk-lib";
-import { DataStack } from "./stack/DataStack";
-import { LambdaStack } from "./stack/LambdaStack";
-import { ApiStack } from "./stack/ApiStack";
+import { DataStack } from "./stacks/DataStack";
+import { LambdaStack } from "./stacks/LambdaStack";
+import { ApiStack } from "./stacks/ApiStack";
+import { AuthStack } from "./stacks/AuthStack";
 
 const app = new App();
 const dataStack = new DataStack(app, "DataStack");
 const lambdaStack = new LambdaStack(app, "LambdaStack", {
   moviesTable: dataStack.spacesTable,
 });
+
+new AuthStack(app, "AuthStack");
+
 new ApiStack(app, "ApiStack", {
   reservationLambdaIntegration: lambdaStack.reservationLambdaIntegration,
   moviesLambdaIntegration: lambdaStack.moviesLambdaIntegration,
