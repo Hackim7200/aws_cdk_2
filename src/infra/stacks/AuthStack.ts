@@ -16,8 +16,8 @@ export class AuthStack extends Stack {
     this.userPool = new UserPool(this, "MoviesUserPool", {
       selfSignUpEnabled: true,
       signInAliases: {
-        email: true,
         username: true,
+        email: true,
       },
     });
     // output the user pool id for the user pool
@@ -26,8 +26,7 @@ export class AuthStack extends Stack {
     });
   }
   private createUserPoolClient() {
-    this.userPoolClient = new UserPoolClient(this, "MoviesUserPoolClient", {
-      userPool: this.userPool,
+    this.userPoolClient = this.userPool.addClient("MoviesUserPoolClient", {
       authFlows: {
         adminUserPassword: true,
         custom: true,
@@ -36,7 +35,7 @@ export class AuthStack extends Stack {
       },
     });
     // output the user pool client id for the user pool client
-    new CfnOutput(this, "UserPoolClientId", {
+    new CfnOutput(this, "MoviesUserPoolClientId", {
       value: this.userPoolClient.userPoolClientId,
     });
   }
