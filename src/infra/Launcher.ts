@@ -10,9 +10,10 @@ const lambdaStack = new LambdaStack(app, "LambdaStack", {
   moviesTable: dataStack.spacesTable,
 });
 
-new AuthStack(app, "AuthStack");
+const authStack = new AuthStack(app, "AuthStack");
 
 new ApiStack(app, "ApiStack", {
   reservationLambdaIntegration: lambdaStack.reservationLambdaIntegration,
   moviesLambdaIntegration: lambdaStack.moviesLambdaIntegration,
+  userPool: authStack.userPool,
 });

@@ -1,15 +1,16 @@
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
-import { UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
+import { CfnUserPoolGroup, UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
 
 export class AuthStack extends Stack {
-  private userPool: UserPool;
+  public userPool: UserPool;
   private userPoolClient: UserPoolClient;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     this.createUserPool();
     this.createUserPoolClient();
+    this.createAdminsGroup();
   }
   private createUserPool() {
     // a user pool shouldnt exist without a client
@@ -39,4 +40,16 @@ export class AuthStack extends Stack {
       value: this.userPoolClient.userPoolClientId,
     });
   }
+
+
+  // this can be used to create degrees of security i.e normal user can login but not delete only admin users can delete items
+  // this would add a groups in the client userpool group called admin
+  // you can use the Ui to add users to a group manually
+  private createAdminsGroup() {
+    new CfnUserPoolGroup(this, 'SpacesAdmins', {
+      userPoolId: this.userPool.userPoolId,
+      groupName: 'admins',
+    });
+  }
+
 }

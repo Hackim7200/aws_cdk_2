@@ -1,26 +1,40 @@
 import { Stack, StackProps } from "aws-cdk-lib";
-import { LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
+import { AuthorizationType, CognitoUserPoolsAuthorizer, LambdaIntegration, MethodOptions, RestApi } from "aws-cdk-lib/aws-apigateway";
+import { IUserPool } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
 
 interface ApiStackProps extends StackProps {
   reservationLambdaIntegration: LambdaIntegration; // helloLambda will be passed to it
   moviesLambdaIntegration: LambdaIntegration; // Add this
+  userPool: IUserPool;
 }
 
 export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const api = new RestApi(this, "spacesApi"); //create a rest api named spacesApi
 
-    const spacesResource = api.root.addResource("reservation"); // adds the path /spaces to the api gateway
+    const api = new RestApi(this, "SpacesApi"); //create a rest api named spacesApi
+
+    const autherizer = new CognitoUserPoolsAuthorizer(this,"SpacesApiAuthorizer", {cognitoUserPools:[props.userPool],
+      identitySource: "method.request.header.Authorization",
+    });
+    autherizer._attachToApi(api);
+
+    const optionsWithAuth: MethodOptions = { // when this is passed with the lambda integration it will automatically authenticate the request befire responding
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer: {
+        authorizerId: autherizer.authorizerId,
+      },
+    };
+    const spacesResource = api.root.addResource("reservation"); // adds the path /reservaitons to the api gateway
     spacesResource.addMethod("GET", props.reservationLambdaIntegration); // adds a GET method to the spaces path
     spacesResource.addMethod("POST", props.reservationLambdaIntegration); // adds a POST method to the spaces path
 
     const moviesResource = api.root.addResource("movies");
-    moviesResource.addMethod("GET", props.moviesLambdaIntegration);
-    moviesResource.addMethod("POST", props.moviesLambdaIntegration);
-    moviesResource.addMethod("PUT", props.moviesLambdaIntegration);
-    moviesResource.addMethod("DELETE", props.moviesLambdaIntegration);
+    moviesResource.addMethod("GET", props.moviesLambdaIntegration,optionsWithAuth);
+    moviesResource.addMethod("POST", props.moviesLambdaIntegration,optionsWithAuth);
+    moviesResource.addMethod("PUT", props.moviesLambdaIntegration,optionsWithAuth);
+    moviesResource.addMethod("DELETE", props.moviesLambdaIntegration,optionsWithAuth);
   }
 }

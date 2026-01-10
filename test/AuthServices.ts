@@ -27,8 +27,11 @@ export class AuthServices {
         return signInOutput
     }
 
+
     public async getIdToken(){
+        // grabs JWT token
         const authSession = await fetchAuthSession();
         return authSession.tokens?.idToken?.toString();
+        console.log(authSession.tokens?.idToken?.toString());
     }
 }
