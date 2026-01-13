@@ -1,0 +1,22 @@
+{
+  "DataStack": {
+    "ExportsOutputRefSpacesTable8A9973559FB4B87D": "SpacesTable-026c60252c2f",
+    "ExportsOutputFnGetAttSpacesTable8A997355Arn242927FE": "arn:aws:dynamodb:eu-west-2:759135634975:table/SpacesTable-026c60252c2f"
+  },
+  "AuthStack": {
+    "UserPoolId": "eu-west-2_qcrsl8aSb",
+    "SpaceIdentityPoolId": "eu-west-2:1501a893-c1d4-464b-b680-938dcac7faff",
+    "ExportsOutputFnGetAttMoviesUserPoolF2117139ArnEE485BA2": "arn:aws:cognito-idp:eu-west-2:759135634975:userpool/eu-west-2_qcrsl8aSb",
+    "MoviesUserPoolClientId": "14pf06359tmc6sg9rb6uh0h2ml"
+  },
+  "LambdaStack": {
+    "ExportsOutputFnGetAttReservationLambda2785A78FArn74DECB00": "arn:aws:lambda:eu-west-2:759135634975:function:LambdaStack-ReservationLambda2785A78F-4uaLuCaThafs",
+    "ExportsOutputFnGetAttMoviesLambda074129B0Arn64911879": "arn:aws:lambda:eu-west-2:759135634975:function:LambdaStack-MoviesLambda074129B0-1R5TnVLz2HGW"
+  },
+  "UiDeploymentStack": {
+    "ExampleUrl": "d2y026lcact8kq.cloudfront.net"
+  },
+  "ApiStack": {
+    "SpacesApiEndpoint36C4F3B6": "https://n8ti6oe7w2.execute-api.eu-west-2.amazonaws.com/prod/"
+  }
+}

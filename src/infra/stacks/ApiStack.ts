@@ -1,5 +1,6 @@
 import { Stack, StackProps } from "aws-cdk-lib";
-import { AuthorizationType, CognitoUserPoolsAuthorizer, LambdaIntegration, MethodOptions, RestApi } from "aws-cdk-lib/aws-apigateway";
+import { AuthorizationType, CognitoUserPoolsAuthorizer, Cors, LambdaIntegration, MethodOptions, ResourceOptions, RestApi } from "aws-cdk-lib/aws-apigateway";
+import { AllowedMethods } from "aws-cdk-lib/aws-cloudfront";
 import { IUserPool } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
 
@@ -27,11 +28,18 @@ export class ApiStack extends Stack {
         authorizerId: autherizer.authorizerId,
       },
     };
-    const spacesResource = api.root.addResource("reservation"); // adds the path /reservaitons to the api gateway
+
+    const optionsWithCors: ResourceOptions = {
+      defaultCorsPreflightOptions:{
+        allowOrigins:Cors.ALL_ORIGINS,
+        allowMethods:Cors.ALL_METHODS
+      }
+    }
+    const spacesResource = api.root.addResource("reservation",optionsWithCors); // adds the path /reservaitons to the api gateway
     spacesResource.addMethod("GET", props.reservationLambdaIntegration); // adds a GET method to the spaces path
     spacesResource.addMethod("POST", props.reservationLambdaIntegration); // adds a POST method to the spaces path
 
-    const moviesResource = api.root.addResource("movies");
+    const moviesResource = api.root.addResource("movies",optionsWithCors );
     moviesResource.addMethod("GET", props.moviesLambdaIntegration,optionsWithAuth);
     moviesResource.addMethod("POST", props.moviesLambdaIntegration,optionsWithAuth);
     moviesResource.addMethod("PUT", props.moviesLambdaIntegration,optionsWithAuth);

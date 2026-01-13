@@ -8,7 +8,8 @@ import { postMovies } from "./PostMovies";
 import { getMovies } from "./GetMovies";
 import { updateMovies } from "./UpdateMovies";
 import { deleteMovies } from "./DeleteMovies";
-import { MissingFieldsError } from "../shared/Validator";
+import { JsonError, MissingFieldsError } from "../shared/Validator";
+import { addCorsHeader } from "../shared/Utils";
 
 const ddbClient = new DynamoDBClient({});
 
@@ -16,50 +17,56 @@ async function handler(
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> {
-  let message: string;
+  
+
+  let response: APIGatewayProxyResult;
 
   try {
     switch (event.httpMethod) {
       case "GET":
         const getResponse = await getMovies(event, ddbClient);
-        console.log(getResponse);
-        return getResponse;
+        response = getResponse;
+        break;
 
       case "POST":
         const postResponse = await postMovies(event, ddbClient);
-        return postResponse;
+        response = postResponse;
+        break;
 
       case "PUT":
         const putResponse = await updateMovies(event, ddbClient);
-        return putResponse;
+        response = putResponse;
+        break;
 
       case "DELETE":
         const deleteResponse = await deleteMovies(event, ddbClient);
-        return deleteResponse;
+        response = deleteResponse;
+        break;
 
       default:
-        message = "Hello from movies default";
         break;
     }
   } catch (error) {
-
-    // checks if error is due to missing fields
     if (error instanceof MissingFieldsError) {
       return {
         statusCode: 400,
-        body: JSON.stringify( error.message ),
+        body: error.message,
+      };
+    }
+    if (error instanceof JsonError) {
+      return {
+        statusCode: 400,
+        body: error.message,
       };
     }
     return {
       statusCode: 500,
-      body: JSON.stringify(error.message),
+      body: error.message,
     };
   }
 
-  const response: APIGatewayProxyResult = {
-    statusCode: 200,
-    body: JSON.stringify(message),
-  };
+  addCorsHeader(response);
+
   return response;
 }
 
