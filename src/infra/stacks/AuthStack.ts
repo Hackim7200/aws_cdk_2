@@ -6,7 +6,7 @@ import {
   UserPool,
   UserPoolClient,
 } from "aws-cdk-lib/aws-cognito";
-import { FederatedPrincipal, Role } from "aws-cdk-lib/aws-iam";
+import { Effect, FederatedPrincipal, PolicyStatement, Role } from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 export class AuthStack extends Stack {
@@ -22,10 +22,11 @@ export class AuthStack extends Stack {
 
     this.createUserPool();
     this.createUserPoolClient();
-    this.createAdminsGroup();
     this.createIdentityPool();
+    
     this.createRoles();
     this.attachRoles();
+    this.createAdminsGroup();
   }
   private createUserPool() {
     // a user pool shouldnt exist without a client
@@ -63,6 +64,7 @@ export class AuthStack extends Stack {
     new CfnUserPoolGroup(this, "SpacesAdmins", {
       userPoolId: this.userPool.userPoolId,
       groupName: "admins",
+      roleArn: this.adminRole.roleArn
     });
   }
 
@@ -83,20 +85,6 @@ export class AuthStack extends Stack {
 
   // here you create roles for identity pool which you need to attach
   private createRoles() {
-    this.authenticatedRole = new Role(this, "CognitoDefaultAuthenticatedRole", {
-      assumedBy: new FederatedPrincipal(
-        "cognito-identity.amazonaws.com",
-        {
-          StringEquals: {
-            "cognito-identity.amazonaws.com:aud": this.identityPool.ref,
-          },
-          "ForAnyValue:StringLike": {
-            "cognito-identity.amazonaws.com:amr": "authenticated",
-          },
-        },
-        "sts:AssumeRoleWithWebIdentity"
-      ),
-    });
     this.unAuthenticatedRole = new Role(
       this,
       "CognitoDefaultUnauthenticatedRole",
@@ -115,6 +103,23 @@ export class AuthStack extends Stack {
         ),
       }
     );
+
+
+    this.authenticatedRole = new Role(this, "CognitoDefaultAuthenticatedRole", {
+      assumedBy: new FederatedPrincipal(
+        "cognito-identity.amazonaws.com",
+        {
+          StringEquals: {
+            "cognito-identity.amazonaws.com:aud": this.identityPool.ref,
+          },
+          "ForAnyValue:StringLike": {
+            "cognito-identity.amazonaws.com:amr": "authenticated",
+          },
+        },
+        "sts:AssumeRoleWithWebIdentity"
+      ),
+    });
+
     this.adminRole = new Role(this, "CognitoAdminRole", {
       assumedBy: new FederatedPrincipal(
         "cognito-identity.amazonaws.com",
@@ -129,6 +134,17 @@ export class AuthStack extends Stack {
         "sts:AssumeRoleWithWebIdentity"
       ),
     });
+
+    this.adminRole.addToPolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions:[
+        's3:ListAllMyBuckets'
+      ],
+      resources:["*"]
+      
+
+    }))
+
   }
 
   // go to UI and you can see the role in IAM >roles > filter for authstach
